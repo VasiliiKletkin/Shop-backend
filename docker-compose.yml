@@ -10,6 +10,6 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend:/home/app/backend
+        - ./backend:/home/app/backend
     ports:
       - 8000:8000
