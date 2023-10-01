@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cart',
     'warehouse',
-    'orders'
+    'orders',
     'products',
 ]
 
