@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     
     'rest_framework',
     
-    'internal_api',
     'carts',
     'warehouses',
     'orders',
