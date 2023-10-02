@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+from products.models import ProductListItem
 
 User = get_user_model()
 
-
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
+    product_items = GenericRelation(ProductListItem, related_query_name="cart")
     
     class Meta:
         verbose_name = 'Корзина'
