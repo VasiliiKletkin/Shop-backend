@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-
-from .models import ProductItem
+from products.models import ProductItem
 
 User = get_user_model()
 
