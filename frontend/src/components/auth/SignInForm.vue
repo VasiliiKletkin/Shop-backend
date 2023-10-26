@@ -29,12 +29,11 @@
   </b-form>
 
   <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ form }}</pre>
-      </b-card>
+    <pre class="m-0">{{ form }}</pre>
+  </b-card>
 </template>
 
 <script>
-
 export default {
   name: "SignIn",
   data() {
@@ -54,14 +53,10 @@ export default {
   // },
   // created() {
   //   if (this.loggedIn) {
-  //     // this.$router.push('/profile');
+  //     this.$router.push('/');
   //   }
   // },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
     login() {
       this.loading = true;
       this.message = "";

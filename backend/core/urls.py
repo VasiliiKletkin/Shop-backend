@@ -14,10 +14,41 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from carts.views import CartViewSet
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from orders.views import OrderViewSet
+from products.views import ProductItemViewSet, ProductViewSet
+from rest_framework import routers
+from rest_framework_simplejwt.views import (TokenObtainPairView,
+                                            TokenRefreshView, TokenVerifyView)
+from warehouses.views import WarehouseViewSet
+
+router = routers.DefaultRouter()
+router.register('carts', CartViewSet)
+router.register('orders', OrderViewSet)
+router.register('products', ProductViewSet)
+router.register('product_items', ProductItemViewSet)
+router.register('warehouses', WarehouseViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('internal_api/', include('internal_api.urls', namespace="internal_api")),
+
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/docs/', SpectacularSwaggerView.as_view(url_name='schema'),
+         name='swagger-ui'),
+
+    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('auth/', include('djoser.urls')),
+
+    path("api/", include(router.urls)),
+
+    # path('carts/', include('carts.urls', namespace="carts_api")),
+    # path('products/', include('products.urls',namespace='products_api')),
+    # path('orders/', include('orders.urls', namespace='orders_api')),
+    # path('warehouses/', include('warehouses.urls', namespace='warehouses_api')),
+
 ]

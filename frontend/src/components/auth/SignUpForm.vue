@@ -91,12 +91,21 @@ export default {
       loading: false,
     };
   },
-
+  // computed: {
+  //   loggedIn() {
+  //     return this.$store.state.auth.status.loggedIn;
+  //   }
+  // },
+  // created() {
+  //   if (this.loggedIn) {
+  //     this.$router.push('/signin');
+  //   }
+  // },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
+    // onSubmit(event) {
+    //   event.preventDefault();
+    //   alert(JSON.stringify(this.form));
+    // },
     register() {
       this.loading = true;
       this.message = "";

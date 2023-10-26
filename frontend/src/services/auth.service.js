@@ -20,7 +20,7 @@ class AuthService {
   logout() {
     localStorage.removeItem("user");
   }
-  
+
   register(user) {
     return axios.post(API_URL + "users/", {
       username: user.username,

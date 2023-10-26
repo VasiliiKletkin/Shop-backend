@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split()
@@ -37,7 +37,7 @@ if DEBUG:
         ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5174',
+    'http://localhost:5173',
 ]
 
 INSTALLED_APPS = [
@@ -63,7 +63,6 @@ DJANGO_CUSTOM_APPS = [
     'warehouses',
     'orders',
     'products',
-    'internal_api',
 ]
 
 INSTALLED_APPS += DJANGO_DEFAULT_APPS + DJANGO_CUSTOM_APPS
@@ -154,12 +153,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
+    # ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
 }
 
 SPECTACULAR_SETTINGS = {
