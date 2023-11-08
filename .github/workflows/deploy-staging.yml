@@ -1,0 +1,24 @@
+name: Deploy to staging
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd backend
+          poetry install
+          poetry run python manage.py migrate
+          poetry run python manage.py collectstatic --no-input
+          poetry run gunicorn core.wsgi:application --bind 0.0.0.0:8000 
