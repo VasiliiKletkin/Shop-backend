@@ -1,3 +1,6 @@
+name: CI
+on: [push]
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -18,4 +21,3 @@ jobs:
         run: cd backend && poetry install
       - name: Run the automated tests (for example)
         run: poetry run python manage.py test
-
