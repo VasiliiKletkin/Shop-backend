@@ -22,4 +22,4 @@ jobs:
       - name: Install the project dependencies
         run: cd backend && poetry install
       - name: Run the automated tests (for example)
-        run: poetry run python manage.py test
+        run: cd backend && poetry run python manage.py test
