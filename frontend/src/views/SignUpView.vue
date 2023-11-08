@@ -1,15 +1,15 @@
 <template>
-    <base-auth-layout>
-      <sign-up-form />
-    </base-auth-layout>
-  </template>
-  <script>
+  <base-auth-layout>
+    <sign-up-form />
+  </base-auth-layout>
+</template>
 
-  import SignUpForm from '@/components/auth/SignUpForm.vue'
-  import BaseAuthLayout from '@/layouts/BaseAuthLayout.vue'
-  
-  export default {
-    name: "SignUp",
-    components: { SignUpForm, BaseAuthLayout }
-  }
-  </script>
+<script>
+import SignUpForm from "@/components/auth/SignUpForm.vue";
+import BaseAuthLayout from "@/layouts/BaseAuthLayout.vue";
+
+export default {
+  name: "SignUp",
+  components: { SignUpForm, BaseAuthLayout },
+};
+</script>

@@ -54,7 +54,6 @@ services:
       - rabbitmq
     command: poetry run celery -A backend beat -l info
 
-
   flower:
     container_name: flower
     image: mher/flower:0.9.7
