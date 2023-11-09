@@ -35,3 +35,14 @@ services:
       - ./backend/mediafiles:/home/app/backend/mediafiles
     depends_on:
       - backend
+    
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes: 
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   command: certonly --webroot -w /var/www/certbot --email @gmail.com -d mysite.com --agree-tos
+  #   depends_on:
+  #     - nginx
+  
