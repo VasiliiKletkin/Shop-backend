@@ -14,6 +14,7 @@ services:
       - ./backend/mediafiles:/home/app/backend/mediafiles
     expose:
       - 8000
+    entrypoint: poetry run bash entrypoint.sh
     command: poetry run gunicorn core.wsgi:application --bind 0.0.0.0:8000
 
   nginx:
@@ -34,4 +35,5 @@ services:
       - ./backend/staticfiles:/home/app/backend/staticfiles
       - ./backend/mediafiles:/home/app/backend/mediafiles
     depends_on:
-      - backend
+        backend:
+          condition: service_healthy
