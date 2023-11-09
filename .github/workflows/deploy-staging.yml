@@ -16,7 +16,7 @@ jobs:
         username: ${{ secrets.STAGING_SSH_USERNAME }}
         password: ${{ secrets.STAGING_SSH_PASSWORD }}
         script: |
-          cd ${{ github.workspace }}
+          cd /home/Shop/
           git pull origin staging && git checkout staging
           docker-compose -f docker-compose.prod.yml up -d --build
           docker system prune -f
