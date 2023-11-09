@@ -1,70 +1,69 @@
 version: "3.4"
 
 services:
-  postgres:
-    image: postgres:12.12-alpine
-    container_name: postgres
-    profiles:
-      - profileName
-    restart: always
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./.env
+  # postgres:
+  #   image: postgres:12.12-alpine
+  #   container_name: postgres
+  #   profiles:
+  #     - profileName
+  #   restart: always
+  #   volumes:
+  #     - ./postgres_data:/var/lib/postgresql/data/
+  #   env_file:
+  #     - ./.env
 
-  redis:
-    image: redis:6.2-alpine
-    container_name: redis
-    restart: always
+  # redis:
+  #   image: redis:6.2-alpine
+  #   container_name: redis
+  #   restart: always
 
-  rabbitmq:
-    image: rabbitmq:3.11-alpine
-    container_name: rabbitmq
-    restart: always
-    volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
-    env_file:
-      - ./.env
-    ports:
-      - 5672:5672
+  # rabbitmq:
+  #   image: rabbitmq:3.11-alpine
+  #   container_name: rabbitmq
+  #   restart: always
+  #   volumes:
+  #     - ./rabbitmq:/var/lib/rabbitmq
+  #   env_file:
+  #     - ./.env
+  #   ports:
+  #     - 5672:5672
 
-  celery_worker:
-    container_name: celeryworker
-    build:
-      context: backend/
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend:/home/app/backend
-    env_file:
-      - ./.env
-    depends_on:
-      - rabbitmq
-    command: poetry run celery -A backend worker -l info --pool=prefork
+  # celery_worker:
+  #   container_name: celeryworker
+  #   build:
+  #     context: backend/
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./backend:/home/app/backend
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - rabbitmq
+  #   command: poetry run celery -A backend worker -l info --pool=prefork
 
-  celery_beat:
-    container_name: celeryscheduler
-    build:
-      context: backend/
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend:/home/app/backend
-    env_file:
-      - ./.env
-    depends_on:
-      - rabbitmq
-    command: poetry run celery -A backend beat -l info
+  # celery_beat:
+  #   container_name: celeryscheduler
+  #   build:
+  #     context: backend/
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./backend:/home/app/backend
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - rabbitmq
+  #   command: poetry run celery -A backend beat -l info
 
-  flower:
-    container_name: flower
-    image: mher/flower:0.9.7
-    command: celery flower
-    env_file:
-      - ./.env
-    ports:
-      - 5555:5555
-    depends_on:
-      - rabbitmq
-
+  # flower:
+  #   container_name: flower
+  #   image: mher/flower:0.9.7
+  #   command: celery flower
+  #   env_file:
+  #     - ./.env
+  #   ports:
+  #     - 5555:5555
+  #   depends_on:
+  #     - rabbitmq
   backend:
     container_name: backend
     build:
@@ -76,10 +75,7 @@ services:
       - ./backend:/home/app/backend
     ports:
       - 8000:8000
-    depends_on:
-      - postgres
-      - redis
-      - rabbitmq
+    entrypoint: poetry run bash entrypoint.sh
     command: poetry run python manage.py runserver 0.0.0.0:8000
 
   frontend:
