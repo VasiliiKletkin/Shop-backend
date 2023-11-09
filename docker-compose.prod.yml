@@ -35,5 +35,4 @@ services:
       - ./backend/staticfiles:/home/app/backend/staticfiles
       - ./backend/mediafiles:/home/app/backend/mediafiles
     depends_on:
-        backend:
-          condition: service_healthy
+      - backend
