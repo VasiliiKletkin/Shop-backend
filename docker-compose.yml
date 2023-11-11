@@ -83,25 +83,25 @@ services:
     #     condition: service_healthy
 
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./frontend:/home/app/frontend
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
-    env_file:
-      - .env
-    command: >
-      sh -c "if [ ! -d "node_modules" ]; then
-               npm i
-               npm rebuild node-sass
-             fi
-             if [ ! -d "frontend_static" ]; then
-               npm run build
-             fi
-             npm start"
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #     - ./frontend:/home/app/frontend
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - backend
+  #   env_file:
+  #     - .env
+  #   command: >
+  #     sh -c "if [ ! -d "node_modules" ]; then
+  #              npm i
+  #              npm rebuild node-sass
+  #            fi
+  #            if [ ! -d "frontend_static" ]; then
+  #              npm run build
+  #            fi
+  #            npm start"
