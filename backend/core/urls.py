@@ -35,20 +35,12 @@ router.register('warehouses', WarehouseViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/docs/', SpectacularSwaggerView.as_view(url_name='schema'),
-         name='swagger-ui'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 
-    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('auth/', include('djoser.urls')),
-
-    path("api/", include(router.urls)),
-
-    # path('carts/', include('carts.urls', namespace="carts_api")),
-    # path('products/', include('products.urls',namespace='products_api')),
-    # path('orders/', include('orders.urls', namespace='orders_api')),
-    # path('warehouses/', include('warehouses.urls', namespace='warehouses_api')),
-
+    path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/auth/', include('djoser.urls')),
+    path('api/', include(router.urls)),
 ]
