@@ -9,6 +9,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ./backend:/home/app/backend
       - ./backend/staticfiles:/home/app/backend/staticfiles
       - ./backend/mediafiles:/home/app/backend/mediafiles
     expose:
