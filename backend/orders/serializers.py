@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from products.serializers import ProductItemSerializer
+from rest_framework import serializers
 
 from .models import Order
 
@@ -18,7 +18,6 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderDetailSerializer(OrderSerializer):
     product_items = ProductItemSerializer(many=True)
-
     total_price = serializers.ReadOnlyField()
 
     class Meta:

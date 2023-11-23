@@ -10,6 +10,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    total_price = serializers.ReadOnlyField()
     class Meta:
         model = ProductItem
         fields = '__all__'
