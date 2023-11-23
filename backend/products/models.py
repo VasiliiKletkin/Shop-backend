@@ -41,6 +41,6 @@ class ProductItem(models.Model):
     def __str__(self):
         return f'PLI {self.product} {self.quantity}'
 
-    @property
+    # @property
     def total_price(self):
         return self.quantity * self.product.price
