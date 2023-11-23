@@ -32,7 +32,7 @@ class Product(models.Model):
 
 class ProductItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -41,5 +41,6 @@ class ProductItem(models.Model):
     def __str__(self):
         return f'PLI {self.product} {self.quantity}'
 
+    @property
     def total_price(self):
         return self.quantity * self.product.price

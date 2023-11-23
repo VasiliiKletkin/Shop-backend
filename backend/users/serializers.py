@@ -7,8 +7,6 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    code = serializers.CharField(source='username', read_only=True)
-
     class Meta:
         model = User
         fields = ['code']
