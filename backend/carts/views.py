@@ -1,12 +1,14 @@
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.decorators import action
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from products.models import ProductItem
 from carts.models import Cart
 from carts.serializers import CartSerializer
+from products.models import ProductItem
 from products.serializers import ProductItemSerializer
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
+                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 
 class CartViewSet(GenericViewSet):
@@ -38,3 +40,24 @@ class CartViewSet(GenericViewSet):
             serializer.is_valid(raise_exception=True)
             content_object.delete(serializer.instance.product_id)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# class CartProductItemViewSet(ModelViewSet):
+#     queryset = ProductItem.objects.all()
+#     serializer_class = ProductItemSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return self.request.user.cart.product_items.all()
+
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.filter_queryset(self.get_queryset())
+        
+#         page = self.paginate_queryset(queryset)
+#         if page is not None:
+#             serializer = self.get_serializer(page, many=True)
+#             return self.get_paginated_response(serializer.data)
+
+#         serializer = self.get_serializer(queryset, many=True)
+#         return Response(serializer.data)
+

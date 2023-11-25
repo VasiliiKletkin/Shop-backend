@@ -3,10 +3,9 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
-from products.models import ProductItem
+from products.models import ProductItem, Product
 
 User = get_user_model()
-
 
 class Order(models.Model):
     ORDER_STATUS_CONFIRMATION = "CONFIRMATION"
@@ -35,7 +34,6 @@ class Order(models.Model):
 
     user = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="orders")
-    product_items = GenericRelation(ProductItem, related_query_name="order")
 
     class Meta:
         verbose_name = 'Заказ'
@@ -46,4 +44,15 @@ class Order(models.Model):
 
     # @property
     def total_price(self):
-        return sum(item.total_price() for item in self.product_items.all())
+        return sum(item.total_price() for item in self.order_items.all())
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, editable=False, related_name="order_items")
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="order_items")
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField()
+    
+    def total_price(self):
+        return self.quantity * self.price
+    

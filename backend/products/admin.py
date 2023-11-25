@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.contrib.contenttypes.admin import GenericTabularInline
 from .models import Product, ProductItem
 
 
@@ -9,6 +9,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 class ProductItemAdmin(admin.ModelAdmin):
     pass
+
+
+class ProductItemInline(GenericTabularInline):
+    model = ProductItem
 
 
 admin.site.register(Product, ProductAdmin)
