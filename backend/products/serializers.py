@@ -15,3 +15,7 @@ class ProductItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductItem
         fields = '__all__'
+        read_only_fields = (
+            'product',
+            'total_price',
+        )

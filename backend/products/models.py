@@ -1,4 +1,5 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import (GenericForeignKey,
+                                                GenericRelation)
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
@@ -44,3 +45,22 @@ class ProductItem(models.Model):
     # @property
     def total_price(self):
         return self.quantity * self.product.price
+
+
+class ProductItemMixin(models.Model):
+    product_items = GenericRelation(
+        ProductItem)
+
+    class Meta:
+        abstract = True
+        
+    def update_or_create(self, product_id, quantity):
+        obj, created = self.product_items.update_or_create(
+            product_id=product_id, defaults={'quantity': quantity})
+        return obj
+
+    def delete(self, product_id):
+        self.product_items.filter(product_id=product_id).delete()
+
+    def total_price(self):
+        return sum(item.total_price() for item in self.product_items.all())

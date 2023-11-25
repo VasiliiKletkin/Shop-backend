@@ -1,12 +1,11 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
-from products.models import ProductItem
+from products.models import ProductItem, ProductItemMixin
 
 
-class Warehouse(models.Model):
+class Warehouse(ProductItemMixin, models.Model):
     name = models.CharField(max_length=100)
-    product_items = GenericRelation(ProductItem, related_query_name="warehouse")
-    
+        
     class Meta:
         verbose_name = 'Склад'
         verbose_name_plural = 'Склады'
