@@ -20,7 +20,7 @@ class CartViewSet(GenericViewSet):
     def get_object(self):
         return self.get_queryset().first()
 
-    @action(detail=False, methods=['get', 'post', 'delete'])
+    @action(detail=False, methods=['get', 'post', 'delete'], permission_classes=[IsAuthenticated])
     def my(self, request):
         if request.method == 'GET':
             content_object = self.get_object()
