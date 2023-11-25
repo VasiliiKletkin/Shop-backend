@@ -20,24 +20,21 @@ class CartViewSet(GenericViewSet):
     def get_object(self):
         return self.get_queryset().first()
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get', 'post', 'delete'])
     def my(self, request):
-        content_object = self.get_object()
-        serializer = self.get_serializer(content_object)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['post'])
-    def update_or_create(self, request):
-        content_object = self.get_object()
-        serializer = ProductItemSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        content_object.update_or_create(**serializer.validated_data)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['post'])
-    def delete(self, request):
-        content_object = self.get_object()
-        serializer = ProductItemSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        content_object.delete(serializer.instance.product_id)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.method == 'GET':
+            content_object = self.get_object()
+            serializer = self.get_serializer(content_object)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'POST':
+            content_object = self.get_object()
+            serializer = ProductItemSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            content_object.update_or_create(**serializer.validated_data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'DELETE':
+            content_object = self.get_object()
+            serializer = ProductItemSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            content_object.delete(serializer.instance.product_id)
+            return Response(serializer.data, status=status.HTTP_200_OK)
