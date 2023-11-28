@@ -16,7 +16,7 @@ services:
       context: ./backend
       dockerfile: ./Dockerfile
     env_file:
-      - .env
+      - ./.env
     volumes:
       - ./backend:/home/app/backend
       - ./backend/staticfiles:/home/app/backend/staticfiles
