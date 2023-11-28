@@ -1,63 +1,41 @@
-from carts.models import Cart
-from carts.serializers import CartSerializer
-from products.models import ProductItem
-from products.serializers import ProductItemSerializer
 from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   RetrieveModelMixin, UpdateModelMixin)
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.mixins import ListModelMixin
+from .serializers import CartSerializer, CartItemWriteSerializer, CartItemReadSerializer
+from django.forms.models import model_to_dict
+
+from .service import Cart
 
 
-class CartViewSet(GenericViewSet):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+class CartAPI(APIView):
+    """
+    Single API to handle cart operations
+    """
 
-    def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+    def get(self, request, format=None):
+        cart = Cart(request)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_object(self):
-        return self.get_queryset().first()
+    def delete(self, request, format=None):
+        cart = Cart(request)
+        if "clear" in request.data:
+            cart.clear()
+            return Response({"message": "Cart cleared"},status=status.HTTP_204_NO_CONTENT)
+        serializer = CartItemWriteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cart.remove(product=model_to_dict(serializer.validated_data["product"]))
+        return Response({"message": "Removed from cart"}, status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=False, methods=['get', 'post', 'delete'], permission_classes=[IsAuthenticated])
-    def my(self, request):
-        if request.method == 'GET':
-            content_object = self.get_object()
-            serializer = self.get_serializer(content_object)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        elif request.method == 'POST':
-            content_object = self.get_object()
-            serializer = ProductItemSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            content_object.update_or_create(**serializer.validated_data)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        elif request.method == 'DELETE':
-            content_object = self.get_object()
-            serializer = ProductItemSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            content_object.delete(serializer.instance.product_id)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class CartProductItemViewSet(ModelViewSet):
-#     queryset = ProductItem.objects.all()
-#     serializer_class = ProductItemSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_queryset(self):
-#         return self.request.user.cart.product_items.all()
-
-#     def list(self, request, *args, **kwargs):
-#         queryset = self.filter_queryset(self.get_queryset())
-        
-#         page = self.paginate_queryset(queryset)
-#         if page is not None:
-#             serializer = self.get_serializer(page, many=True)
-#             return self.get_paginated_response(serializer.data)
-
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data)
-
+    def post(self, request, **kwargs):
+        cart = Cart(request)
+        serializer = CartItemWriteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cart.add(
+            product=model_to_dict(serializer.validated_data["product"]),
+            quantity=serializer.validated_data["quantity"],
+            override_quantity=bool(
+                request.data.get("override_quantity", False)),
+        )
+        return Response({"message": "Added to cart"}, status=status.HTTP_202_ACCEPTED)

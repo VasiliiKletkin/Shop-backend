@@ -18,6 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     total_price = serializers.ReadOnlyField()
+
     class Meta:
         model = OrderItem
         fields = '__all__'
@@ -25,7 +26,6 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderDetailSerializer(OrderSerializer):
     order_items = OrderItemSerializer(many=True)
-    total_price = serializers.ReadOnlyField()
 
     class Meta:
         model = Order
