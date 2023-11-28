@@ -1,9 +1,9 @@
-from django.contrib import admin
 from carts.views import CartAPI
+from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from orders.views import OrderViewSet
-from products.views import ProductViewSet, ProductItemViewSet
+from products.views import ProductItemViewSet, ProductViewSet
 from rest_framework import routers
 from users.views import CustomAuthToken, UserViewSet
 

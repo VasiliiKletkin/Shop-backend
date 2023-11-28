@@ -25,7 +25,7 @@ class CartAPI(APIView):
             return Response({"message": "Cart cleared"},status=status.HTTP_204_NO_CONTENT)
         serializer = CartItemWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        cart.remove(product=model_to_dict(serializer.validated_data["product"]))
+        cart.remove(product=serializer.validated_data["product"])
         return Response({"message": "Removed from cart"}, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, **kwargs):
@@ -33,9 +33,9 @@ class CartAPI(APIView):
         serializer = CartItemWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         cart.add(
-            product=model_to_dict(serializer.validated_data["product"]),
+            product=serializer.validated_data["product"],
             quantity=serializer.validated_data["quantity"],
-            override_quantity=bool(
-                request.data.get("override_quantity", False)),
+            update_quantity=bool(
+                request.data.get("update_quantity", False)),
         )
         return Response({"message": "Added to cart"}, status=status.HTTP_202_ACCEPTED)

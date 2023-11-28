@@ -1,6 +1,15 @@
 version: "3.4"
 
 services:
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/redis:/data
+    restart: always
+
   backend:
     container_name: backend
     build:
@@ -16,6 +25,8 @@ services:
       - 8000
     entrypoint: poetry run bash entrypoint.sh
     command: poetry run gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    depends_on:
+      - redis
 
   nginx:
     container_name: nginx

@@ -12,10 +12,14 @@ services:
   #   env_file:
   #     - ./.env
 
-  # redis:
-  #   image: redis:6.2-alpine
-  #   container_name: redis
-  #   restart: always
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/redis:/data
+    restart: always
 
   # rabbitmq:
   #   image: rabbitmq:3.11-alpine
@@ -78,9 +82,10 @@ services:
       - 8000:8000
     entrypoint: poetry run bash entrypoint.sh
     command: poetry run python manage.py runserver 0.0.0.0:8000
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+    depends_on:
+      - redis
+      # postgres:
+      #   condition: service_healthy
 
 
   # frontend:
