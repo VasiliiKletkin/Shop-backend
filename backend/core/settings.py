@@ -65,6 +65,7 @@ DJANGO_CUSTOM_APPS = [
     'orders',
     'products',
     'users',
+    'coupons',
 ]
 
 INSTALLED_APPS += DJANGO_DEFAULT_APPS + DJANGO_CUSTOM_APPS

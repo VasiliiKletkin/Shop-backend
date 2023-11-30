@@ -1,4 +1,3 @@
-from products.serializers import ProductItemSerializer
 from rest_framework import serializers
 
 from .models import Order, OrderItem

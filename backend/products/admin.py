@@ -1,19 +1,19 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
-from .models import Product, ProductItem
+from .models import Product
+
+from .models import Category, Product
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+    prepopulated_fields = {'slug': ('name',)}
+admin.site.register(Category, CategoryAdmin)
 
 
 class ProductAdmin(admin.ModelAdmin):
-    pass
-
-
-class ProductItemAdmin(admin.ModelAdmin):
-    pass
-
-
-class ProductItemInline(GenericTabularInline):
-    model = ProductItem
-
-
+    list_display = ['name', 'slug', 'price', 'stock', 'available', 'created_date', 'updated_date']
+    list_filter = ['available', 'created_date', 'updated_date']
+    list_editable = ['price', 'stock', 'available']
+    prepopulated_fields = {'slug': ('name',)}
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductItem, ProductAdmin)
+
