@@ -6,6 +6,7 @@ from coupons.models import Coupon
 from django.core.cache import cache
 from rest_framework.exceptions import NotAuthenticated
 
+
 class Cart:
     def __init__(self, request):
         """
@@ -14,12 +15,16 @@ class Cart:
         if request.user.is_anonymous:
             raise NotAuthenticated("User is not authenticated")
         self.user_id = request.user.id
+        self.coupon_code = request.query_params.get('coupon', None)
         self.cart = cache.get(f"{settings.CART_SESSION_ID}_{self.user_id}", {})
         self.items = self.__iter__()
         self.total_price = self.get_total_price()
+        self.total_price_after_discount = self.get_total_price_after_discount()
+        self.discount = self.get_discount()
 
     def save(self):
-        self.cart = cache.set(f"{settings.CART_SESSION_ID}_{self.user_id}", self.cart)
+        self.cart = cache.set(
+            f"{settings.CART_SESSION_ID}_{self.user_id}", self.cart)
 
     def add(self, product, quantity=1, update_quantity=False):
         """
@@ -46,6 +51,10 @@ class Cart:
             del self.cart[product_id]
             self.save()
 
+    def clear(self):
+        self.cart = {}
+        self.save()
+
     def __iter__(self):
         """
         Loop through cart items and fetch the products from the database
@@ -70,20 +79,14 @@ class Cart:
         products = Product.objects.filter(id__in=product_ids)
         return sum(product.price * self.cart[str(product.id)]["quantity"] for product in products)
 
-    def clear(self):
-        self.cart = {}
-        self.save()
-
-    @property
-    def coupon(self):
-        if self.coupon_id:
-            return Coupon.objects.get(id=self.coupon_id)
-        return None
-
     def get_discount(self):
         if self.coupon:
             return (self.coupon.discount / Decimal('100')) * self.get_total_price()
-        return Decimal('0')
+        return 0
 
     def get_total_price_after_discount(self):
         return self.get_total_price() - self.get_discount()
+
+    @property
+    def coupon(self):
+        return Coupon.objects.get(code=self.coupon_code) if self.coupon_code else None

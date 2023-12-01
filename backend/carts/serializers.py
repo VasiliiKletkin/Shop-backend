@@ -3,11 +3,12 @@ from rest_framework import serializers
 from products.models import Product
 from products.serializers import ProductSerializer
 
+
 class CartItemWriteSerializer(serializers.Serializer):
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all())
     quantity = serializers.IntegerField(min_value=1)
-    total_price = serializers.ReadOnlyField()
-    
+
 
 class CartItemReadSerializer(serializers.Serializer):
     product = ProductSerializer()
@@ -18,4 +19,5 @@ class CartItemReadSerializer(serializers.Serializer):
 class CartSerializer(serializers.Serializer):
     items = CartItemReadSerializer(many=True)
     total_price = serializers.ReadOnlyField()
-    
+    total_price_after_discount = serializers.ReadOnlyField()
+    discount = serializers.ReadOnlyField()
