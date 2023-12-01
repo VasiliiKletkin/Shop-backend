@@ -16,6 +16,6 @@ class CartItemReadSerializer(serializers.Serializer):
     
 
 class CartSerializer(serializers.Serializer):
-    cart_items = CartItemReadSerializer(many=True)
+    items = CartItemReadSerializer(many=True)
     total_price = serializers.ReadOnlyField()
     

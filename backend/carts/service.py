@@ -4,15 +4,18 @@ from django.conf import settings
 from products.models import Product
 from coupons.models import Coupon
 from django.core.cache import cache
+from rest_framework.exceptions import NotAuthenticated
 
 class Cart:
     def __init__(self, request):
         """
         initialize the cart
         """
+        if request.user.is_anonymous:
+            raise NotAuthenticated("User is not authenticated")
         self.user_id = request.user.id
         self.cart = cache.get(f"{settings.CART_SESSION_ID}_{self.user_id}", {})
-        self.cart_items = self.__iter__()
+        self.items = self.__iter__()
         self.total_price = self.get_total_price()
 
     def save(self):

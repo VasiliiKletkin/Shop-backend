@@ -4,11 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin
 from .serializers import CartSerializer, CartItemWriteSerializer, CartItemReadSerializer
 from django.forms.models import model_to_dict
+from rest_framework.permissions import IsAuthenticated
 
 from .service import Cart
 
 
 class CartAPI(APIView):
+    permission_classes = [IsAuthenticated]
     """
     Single API to handle cart operations
     """
@@ -22,7 +24,7 @@ class CartAPI(APIView):
         cart = Cart(request)
         if "clear" in request.data:
             cart.clear()
-            return Response({"message": "Cart cleared"},status=status.HTTP_204_NO_CONTENT)
+            return Response({"message": "Cart cleared"}, status=status.HTTP_204_NO_CONTENT)
         serializer = CartItemWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         cart.remove(product=serializer.validated_data["product"])

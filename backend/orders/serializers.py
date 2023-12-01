@@ -2,12 +2,9 @@ from rest_framework import serializers
 
 from .models import Order, OrderItem
 
-
 class OrderSerializer(serializers.ModelSerializer):
-    payment_type_display = serializers.CharField(
-        source="get_payment_type_display")
-    status_display = serializers.CharField(
-        source="get_status_display")
+    payment_type_display = serializers.ReadOnlyField(source='get_payment_type_display')
+    status_display = serializers.ReadOnlyField(source='get_payment_type_display')
     total_price = serializers.ReadOnlyField()
 
     class Meta:
@@ -24,7 +21,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderDetailSerializer(OrderSerializer):
-    order_items = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
