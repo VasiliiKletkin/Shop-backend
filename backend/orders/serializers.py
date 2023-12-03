@@ -12,14 +12,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ("payment_type_display",
-                  "status_display",
-                  "total_price",
-                  "first_name",
-                  "last_name",
-                  "email",
-                  "address",
-                  "city",)
+        exclude = ['user',]
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
