@@ -63,8 +63,8 @@ class Order(models.Model):
         return f"order {self.id}"
 
     # @property
-    def get_total_cost(self):
-        total_cost = sum(item.get_cost() for item in self.items.all())
+    def get_total_price(self):
+        total_cost = sum(item.get_total_price() for item in self.items.all())
         return total_cost - total_cost * (self.discount / Decimal('100'))
 
 
