@@ -24,7 +24,7 @@ class Cart:
 
     def save(self):
         self.cart = cache.set(
-            f"{settings.CART_SESSION_ID}_{self.user_id}", self.cart)
+            key=f"{settings.CART_SESSION_ID}_{self.user_id}", value=self.cart, timeout=15552000)
 
     def add(self, product, quantity=1, update_quantity=False):
         """
