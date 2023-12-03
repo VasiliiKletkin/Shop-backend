@@ -8,7 +8,7 @@ class OrderSerializer(serializers.ModelSerializer):
         source='get_payment_type_display')
     status_display = serializers.ReadOnlyField(
         source='get_payment_type_display')
-    total_price = serializers.ReadOnlyField()
+    total_price = serializers.ReadOnlyField(source='get_total_price')
 
     class Meta:
         model = Order
@@ -20,7 +20,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    total_price = serializers.ReadOnlyField()
+    total_price = serializers.ReadOnlyField(source='get_total_price')
 
     class Meta:
         model = OrderItem
