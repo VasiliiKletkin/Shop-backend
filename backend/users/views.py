@@ -1,16 +1,16 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 
-from .serializers import UserSerializer, CustomAuthTokenSerializer
+from .serializers import CustomAuthTokenSerializer, UserSerializer
 from .utils import generate_random_string
 
 User = get_user_model()
 
 
-class UserViewSet(generics.CreateAPIView, viewsets.GenericViewSet):
+class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -26,9 +26,10 @@ class UserViewSet(generics.CreateAPIView, viewsets.GenericViewSet):
 
 class CustomAuthToken(ObtainAuthToken):
     serializer_class = CustomAuthTokenSerializer
-    
+
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)

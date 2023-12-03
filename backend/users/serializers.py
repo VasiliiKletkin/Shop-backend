@@ -7,10 +7,10 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = User
-        fields = ['code']
-        read_only_fields = ['code']
+        fields = ['username']
 
 
 class CustomAuthTokenSerializer(AuthTokenSerializer):
