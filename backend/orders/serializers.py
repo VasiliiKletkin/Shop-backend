@@ -8,7 +8,8 @@ class OrderSerializer(serializers.ModelSerializer):
         source='get_payment_type_display')
     status_display = serializers.ReadOnlyField(
         source='get_payment_type_display')
-    total_price = serializers.ReadOnlyField(source='get_total_price')
+    total_price = serializers.ReadOnlyField(
+        source='get_total_price')
 
     class Meta:
         model = Order
@@ -28,8 +29,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderDetailSerializer(OrderSerializer):
-    items = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(many=True, read_only=True)
 
-    class Meta:
+    class Meta(OrderSerializer.Meta):
         model = Order
-        fields = '__all__'
+        fields = OrderSerializer.Meta.fields + ['items']
